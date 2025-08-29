@@ -3,10 +3,18 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>Computadora3._0</RootNamespace>
+    <RootNamespace>ProGrafica</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Circulo.cs" />
+    <Compile Remove="Computadora.cs" />
+    <Compile Remove="Figura.cs" />
+    <Compile Remove="Game1.cs" />
+    <Compile Remove="Poligono.cs" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.9.4" />
@@ -17,6 +25,12 @@
 
   <ItemGroup>
     <None Update="fragment_shader.glsl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="shader.frag">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="shader.vert">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="vertex_shader.glsl">

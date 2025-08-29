@@ -1,7 +1,7 @@
 ﻿using OpenTK.Mathematics; // Para vectores 2D y colores (Vector2, Vector4)
 using System.Collections.Generic; // Para usar listas de figuras
 
-namespace Graficos2D
+namespace ProGrafica
 {
     // Clase que representa una computadora 2D hecha con figuras básicas
     public class Computadora
@@ -68,10 +68,34 @@ namespace Graficos2D
             // Vector2(0.55f,-0.4f) => posición central
             // 0.08f => radio del círculo
             partes.Add(new Circulo(
-                new Vector2(0.55f, -0.4f),
+                new Vector2(0.6f, -0.5f),
                 new Vector4(0.3f, 0.3f, 0.3f, 1), // Gris oscuro
                 0.08f
             ));
+            // =========================
+            // 5to CASE
+            // =========================
+            // Rectángulo azul dentro de la pantalla
+            partes.Add(new Poligono(
+                new Vector2(0.7f, 0.0f),                 // Centro
+                new Vector4(0, 0, 0, 1), // Color azul claro (CornflowerBlue)
+                new Vector2[] {                        // Vertices
+                    new Vector2(-0.2f, 0.4f),
+                    new Vector2(0.0f, 0.4f),
+                    new Vector2(0.0f, -0.3f),
+                    new Vector2(-0.2f, -0.3f)
+                }
+            ));
+            partes.Add(new Poligono(
+               new Vector2(0.7f, 0.0f),                 // Centro
+               new Vector4(0.39f, 0.58f, 0.93f, 1), // Color azul claro (CornflowerBlue)
+               new Vector2[] {                        // Vertices
+                    new Vector2(-0.19f, 0.39f),
+                    new Vector2(-0.01f, 0.39f),
+                    new Vector2(-0.01f, -0.29f),
+                    new Vector2(-0.19f, -0.29f)
+               }
+           ));
         }
 
         // =========================

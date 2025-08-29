@@ -1,6 +1,6 @@
 ﻿using OpenTK.Mathematics;  // Para Vector2 y Vector4
 
-namespace Graficos2D
+namespace ProGrafica
 {
     // Clase abstracta Figura: no se puede instanciar directamente
     public abstract class Figura

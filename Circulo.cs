@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 
-namespace Graficos2D
+namespace ProGrafica
 {
     public class Circulo : Figura
     {

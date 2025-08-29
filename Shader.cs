@@ -1,10 +1,11 @@
 ﻿// Archivo: Shader.cs
 // Maneja la creación y uso de shaders GLSL
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 using System;
 using System.IO;
 
-namespace Graficos2D
+namespace ProGrafica
 {
     public class Shader
     {
@@ -53,6 +54,11 @@ namespace Graficos2D
         {
             int location = GL.GetUniformLocation(Handle, "uColor");
             GL.Uniform4(location, r, g, b, a);
+        }
+        public void SetMatrix4(string name, Matrix4 matrix)
+        {
+            int location = GL.GetUniformLocation(Handle, name);
+            GL.UniformMatrix4(location, false, ref matrix);
         }
     }
 }

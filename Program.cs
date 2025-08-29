@@ -1,21 +1,34 @@
-﻿using OpenTK.Windowing.Desktop;
+﻿using OpenTK.Mathematics;
+using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
 
-namespace Graficos2D
+namespace ProGrafica
 {
     class Program
     {
-        static void Main(string[] args)
+        public static void Main()
         {
-            var gameSettings = GameWindowSettings.Default;
-            var nativeSettings = new NativeWindowSettings()
+            var monitors = Monitors.GetMonitors(); // Obtiene lista de monitores
+            foreach (var m in monitors)
             {
-                Size = new OpenTK.Mathematics.Vector2i(800, 600),
-                Title = "Computadora 2D con OpenTK"
+                Console.WriteLine($"Monitor: {m.Name} - {m.ClientArea.Size}");
+            }
+
+            // Ejemplo: elegir el segundo monitor (índice 1)
+            var monitor = monitors[1];
+
+            var gws = GameWindowSettings.Default;
+            var nws = new NativeWindowSettings()
+            {
+                Title = "OpenTK Fullscreen en monitor específico",
+                StartFocused = true,
+                WindowState = WindowState.Fullscreen,
+                CurrentMonitor = monitor.Handle // asigna el monitor correcto
             };
 
-            using (var juego = new Game(gameSettings, nativeSettings))
+            using (var game = new Game(gws, nws))
             {
-                juego.Run();
+                game.Run();
             }
         }
     }

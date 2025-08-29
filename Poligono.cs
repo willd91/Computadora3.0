@@ -1,7 +1,7 @@
 ﻿using OpenTK.Graphics.OpenGL4;  // Funciones de OpenGL 4
 using OpenTK.Mathematics;       // Vector2, Vector4, etc.
 
-namespace Graficos2D
+namespace ProGrafica
 {
     // Poligono hereda de Figura
     public class Poligono : Figura
