@@ -2,8 +2,7 @@
 // Maneja la creación y uso de shaders GLSL
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-using System;
-using System.IO;
+
 
 namespace ProGrafica
 {

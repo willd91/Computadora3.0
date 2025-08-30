@@ -2,14 +2,11 @@
 using OpenTK.Windowing.Desktop;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-using System.Collections.Generic;
 
 namespace ProGrafica
 {
     public class Game : GameWindow
     {
-
-
         // ========================
         // Variables de Cámara
         // ========================
@@ -37,18 +34,17 @@ namespace ProGrafica
         private List<int> counts = new List<int>();
 
         // 🔹 Partes principales de la computadora
-        private Parte pantalla;
-        private Parte teclado;
-        private Parte mouse;
-        private Parte cpu;
-        private Parte Mesa;
+        
+    
         public Game(GameWindowSettings gws, NativeWindowSettings nws) : base(gws, nws) { }
 
+        //Aqui se inicializa todo, se crean los buffers, se cargan los shaders, objetos, texturas, etc.
+        //Este metodo se llama una sola vez, al iniciar el programa.
         protected override void OnLoad()
         {
             base.OnLoad();
             _cameraPosition = new Vector3(2.0f, 1.0f, 3.0f); // Vista desde un costado
-            GL.ClearColor(0.53f, 0.81f, 0.98f, 1.0f);
+            GL.ClearColor(Color4.Aqua);
             // Habilitamos el Z-buffer para 3D
             GL.Enable(EnableCap.DepthTest);
             
@@ -57,13 +53,8 @@ namespace ProGrafica
             // ==================================================
             // 🔹 Construimos cada parte con sus lados
             // ==================================================
-            pantalla = CrearPantalla();
-            teclado = CrearTeclado();
-            mouse = CrearMouse();
-            cpu = CrearCPU();
-            Mesa = CrearMesa();
             // 🔹 Unimos todo en el objeto "computadora"
-            computadora = new Objeto3D(Vector3.Zero, new List<Parte> { pantalla, teclado,mouse ,cpu, Mesa }, Vector3.One);
+            computadora = new Objeto3D("Computadora",Vector3.Zero, new List<Parte> { CrearPantalla(), CrearTeclado(), CrearMouse(), CrearCPU(), CrearMesa() }, Vector3.One);
 
             // ==================================================
             // 🔹 Generar buffers para cada lado de la computadora
@@ -126,8 +117,7 @@ namespace ProGrafica
             new Vector3(ancho/2 - 0.05f, alto/2 - 0.05f, profundidad/2 + 0.01f),
             new Vector3(ancho/2 - 0.05f, -alto/2 + 0.05f, profundidad/2 + 0.01f),
             new Vector3(-ancho/2 + 0.05f, -alto/2 + 0.05f, profundidad/2 + 0.01f)
-                },
-                new Vector3(0.39f, 0.58f, 0.93f) // azul
+                },Colores.Oro
             ));
 
             // Cara trasera
@@ -186,7 +176,7 @@ namespace ProGrafica
                 new Vector3(0.3f, 0.3f, 0.3f)
             ));
 
-            return new Parte(new Vector3(-0.2f, 0.1f, 0f), lados, Vector3.One);
+            return new Parte("Pantalla",new Vector3(-0.2f, 0.1f, 0f), lados, Vector3.One);
         }
 
         private Parte CrearTeclado()
@@ -264,7 +254,7 @@ namespace ProGrafica
                 new Vector3(0.4f, 0.4f, 0.4f)
             ));
 
-            return new Parte(new Vector3(-0.25f, -0.05f, 0.0f), lados, Vector3.One);
+            return new Parte("Teclado",new Vector3(-0.25f, -0.05f, 0.0f), lados, Vector3.One);
         }
 
         private Parte CrearMouse()
@@ -315,7 +305,7 @@ namespace ProGrafica
                 lados.Add(new Lado(centro, new List<Vector3> { sup1, sup2, inf2, inf1 }, new Vector3(0.25f, 0.25f, 0.25f)));
             }
 
-            return new Parte(new Vector3(-0.1f, 0.0f, 0f), lados, Vector3.One);
+            return new Parte("Mouse",new Vector3(0.1f, 0.0f,0.15f), lados, Vector3.One);
         }
 
         private Parte CrearCPU()
@@ -403,9 +393,10 @@ namespace ProGrafica
                 new Vector3(0.2f, 0.2f, 0.2f)
             ));
 
-            return new Parte(new Vector3(0.0f, 0.1f, -0.1f), lados, Vector3.One);
+            return new Parte("Cpu",new Vector3(0.0f, 0.1f, -0.1f), lados, Vector3.One);
         }
         private Parte CrearMesa() {
+            
             var lados = new List<Lado>();
             Vector3 centro = new Vector3(0, 0, 0);
             float ancho = 2.0f;    // Eje X (de izquierda a derecha)
@@ -479,11 +470,13 @@ namespace ProGrafica
                 }, colorBordeMesa
             ));
 
-            return new Parte(new Vector3(-0.3f, -0.1f, -0.2f), lados, Vector3.One);
+            return new Parte("Mesa",new Vector3(-0.3f, -0.1f, -0.2f), lados, Vector3.One);
         }
         // ==================================================
         // 🔹 Render
         // ==================================================
+        //Esto se ejecuta cada vez que se refresca la pantalla.Debería ser 60 veces por segundo.
+        //Aqui se dibuja todo.No se crean objetos ni buffers.
         protected override void OnRenderFrame(FrameEventArgs args)
         {
             base.OnRenderFrame(args);
@@ -541,23 +534,7 @@ namespace ProGrafica
             if (KeyboardState.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.Escape))
                 Close();
 
-            // ========================
-            // Movimiento de la Cámara
-            // ========================
             float cameraSpeed = _cameraSpeed * (float)args.Time;
-
-            if (KeyboardState.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.W))
-                _cameraPosition += _cameraFront * cameraSpeed;
-            if (KeyboardState.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.S))
-                _cameraPosition -= _cameraFront * cameraSpeed;
-            if (KeyboardState.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.A))
-                _cameraPosition -= Vector3.Normalize(Vector3.Cross(_cameraFront, _cameraUp)) * cameraSpeed;
-            if (KeyboardState.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.D))
-                _cameraPosition += Vector3.Normalize(Vector3.Cross(_cameraFront, _cameraUp)) * cameraSpeed;
-            if (KeyboardState.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.Space))
-                _cameraPosition += _cameraUp * cameraSpeed;
-            if (KeyboardState.IsKeyDown(OpenTK.Windowing.GraphicsLibraryFramework.Keys.LeftShift))
-                _cameraPosition -= _cameraUp * cameraSpeed;
         }
         // ========================
         // Movimiento con el Mouse

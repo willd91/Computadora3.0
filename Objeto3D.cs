@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTK.Windowing.Common;
-using OpenTK.Windowing.Desktop;
-using OpenTK.Graphics.OpenGL4;
+﻿
 using OpenTK.Mathematics;
 namespace ProGrafica
 {
@@ -18,9 +11,10 @@ namespace ProGrafica
         public List<Parte> Partes { get; set; }
         public Vector3 Centro { get; set; }
         public Vector3 Color { get; set; }
-
-        public Objeto3D(Vector3 centro, List<Parte> partes, Vector3 color)
-        {
+        public string Name { get; set; }
+        public Objeto3D(string name,Vector3 centro, List<Parte> partes, Vector3 color)
+        {   
+            Name = name;
             Centro = centro;
             Color = color;
             Partes = new List<Parte>();
@@ -37,7 +31,7 @@ namespace ProGrafica
                     }
                     ladosRelativos.Add(new Lado(centro + parte.Centro, desplazamientos, lado.Color));
                 }
-                Partes.Add(new Parte(centro + parte.Centro, ladosRelativos, parte.Color));
+                Partes.Add(new Parte(parte.Name,centro + parte.Centro, ladosRelativos, parte.Color));
             }
         }
     }

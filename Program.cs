@@ -1,5 +1,4 @@
-﻿using OpenTK.Mathematics;
-using OpenTK.Windowing.Common;
+﻿using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 
 namespace ProGrafica
@@ -15,12 +14,12 @@ namespace ProGrafica
             }
 
             // Ejemplo: elegir el segundo monitor (índice 1)
-            var monitor = monitors[1];
+            var monitor = monitors[0];
 
             var gws = GameWindowSettings.Default;
             var nws = new NativeWindowSettings()
             {
-                Title = "OpenTK Fullscreen en monitor específico",
+                Title = "COMPUTADORA EN 3D",
                 StartFocused = true,
                 WindowState = WindowState.Fullscreen,
                 CurrentMonitor = monitor.Handle // asigna el monitor correcto
