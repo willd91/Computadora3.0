@@ -1,37 +1,43 @@
-﻿
-using OpenTK.Mathematics;
-namespace ProGrafica
-{
-    #region Clase Parte (Figura 3D)
-    /// <summary>
-    /// Una parte es una figura 3D formada por varios lados.
-    /// Se posiciona con respecto a un centro.
-    /// </summary>
-    public class Parte
-    {
-        public List<Lado> Lados { get; set; }
-        public Vector3 Centro { get; set; }
-        public Vector3 Color { get; set; }
-        public string Name { get; set; }
-        public Parte(string name, Vector3 centro, List<Lado> lados, Vector3 color)
-        {
-            this.Name = name;
-            Centro = centro;
-            Color = color;
-            Lados = new List<Lado>();
+﻿using ProGrafica;
+using System.Text.Json.Serialization;
 
-            // Ajustamos la posición de cada lado en función del centro de la parte
-            foreach (var lado in lados)
+[Serializable]
+public class Parte
+{
+    public List<Lado> Lados { get; set; }
+    public Vertice Centro { get; set; }
+    public Vertice Color { get; set; }
+
+    [JsonConstructor]
+    public Parte(Vertice centro, List<Lado> lados, Vertice color)
+    {
+        this.Centro = centro;
+        this.Color = color;
+        this.Lados = lados;
+    }
+
+    public Parte() : this(new Vertice(0, 0, 0), new List<Lado>(), new Vertice(0, 0, 0)) { }
+
+    public void AplicarColorALados()
+    {
+        foreach (var lado in Lados)
+            lado.Color = this.Color;
+    }
+   /* public float[] DibujarParte()
+    {
+        var datos = new List<float>();
+        foreach (var lado in Lados)
+        {
+            // Calcula vértices del lado con su propio centro
+            var verticesReales = lado.CalcularVerticesReales();
+            // Luego sumamos el offset del centro de la parte
+            foreach (var v in verticesReales)
             {
-                var desplazados = new List<Vector3>();
-                foreach (var v in lado.Vertices)
-                {
-                    desplazados.Add(v.Posicion - lado.Centro); // desplazamiento relativo al lado original
-                }
-                // Re-creamos el lado pero relativo al centro de la parte
-                Lados.Add(new Lado(centro + lado.Centro, desplazados, lado.Color));
+                datos.Add(v.X + Centro.X);
+                datos.Add(v.Y + Centro.Y);
+                datos.Add(v.Z + Centro.Z);
             }
         }
-    }
-    #endregion
+        return datos.ToArray();
+    }*/
 }

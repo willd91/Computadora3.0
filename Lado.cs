@@ -1,36 +1,39 @@
-﻿
-using OpenTK.Mathematics;
+﻿using ProGrafica;
+using System.Text.Json.Serialization;
 
-namespace ProGrafica
+[Serializable]
+public class Lado
 {
-    #region Clase Lado (Polígono 2D en 3D)
-    /// <summary>
-    /// Representa un polígono (cara de una figura).
-    /// Se define con un centro y una lista de desplazamientos relativos de vértices.
-    /// El color se aplica tanto al lado como a los vértices.
-    /// </summary>
-    public class Lado
+    public List<Vertice> Vertices { get; set; }
+    public Vertice Centro { get; set; }
+    public Vertice Color { get; set; }
+    [JsonConstructor] 
+    public Lado(Vertice centro, List<Vertice> vertices, Vertice color)
     {
-        public List<Vertice> Vertices { get; set; }
-        public Vector3 Centro { get; set; }
-        public Vector3 Color { get; set; }
-
-        /// <param name="centro">Centro geométrico del lado</param>
-        /// <param name="desplazamientos">Lista de posiciones relativas al centro</param>
-        /// <param name="color">Color del lado (se pasa también a los vértices)</param>
-        public Lado(Vector3 centro, List<Vector3> desplazamientos, Vector3 color)
-        {
-            this.Centro = centro;
-            this.Color = color;
-            this.Vertices = new List<Vertice>();
-
-            // Cada desplazamiento se convierte en un vértice en coordenadas absolutas
-            foreach (var d in desplazamientos)
-            {
-                var pos = centro + d;
-                this.Vertices.Add(new Vertice(pos, color));
-            }
-        }
+        Centro = centro;
+        Vertices = vertices;
+        Color = color;
     }
-    #endregion
+    public Lado() : this(new Vertice(0, 0, 0), new List<Vertice>(), new Vertice(255, 255, 255)) { }
+    public List<Vertice> CalcularVerticesReales()
+    {
+        var resultado = new List<Vertice>();
+        foreach (var v in Vertices)
+        {
+            resultado.Add(new Vertice(Centro.X + v.X, Centro.Y + v.Y, Centro.Z + v.Z));
+        }
+        return resultado;
+    }
+    public float[] Dibujar()
+    {
+        var reales = CalcularVerticesReales();
+        var datos = new List<float>();
+        foreach (var v in reales)
+        {
+            datos.Add(v.X);
+            datos.Add(v.Y);
+            datos.Add(v.Z);
+        }
+        return datos.ToArray();
+    }
 }
