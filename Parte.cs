@@ -23,21 +23,12 @@ public class Parte
         foreach (var lado in Lados)
             lado.Color = this.Color;
     }
-   /* public float[] DibujarParte()
-    {
-        var datos = new List<float>();
+    public void Dibujar(Shader shader)
+    {  
         foreach (var lado in Lados)
         {
-            // Calcula vértices del lado con su propio centro
-            var verticesReales = lado.CalcularVerticesReales();
-            // Luego sumamos el offset del centro de la parte
-            foreach (var v in verticesReales)
-            {
-                datos.Add(v.X + Centro.X);
-                datos.Add(v.Y + Centro.Y);
-                datos.Add(v.Z + Centro.Z);
-            }
+            lado.Dibujar(shader);//mandamos a dibujar a los lados
         }
-        return datos.ToArray();
-    }*/
+        
+    }
 }

@@ -1,5 +1,5 @@
-﻿
-
+﻿using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace ProGrafica
@@ -8,36 +8,56 @@ namespace ProGrafica
     [Serializable]
     public class Objeto3D
     {
-        public List<Parte> Partes { get; set; }
+        // Diccionario: clave = nombre de la parte, valor = Parte
+        public Dictionary<string, Parte> Partes { get; set; }
         public Vertice Centro { get; set; }
         public Vertice Color { get; set; }
         public string Name { get; set; }
-        public Objeto3D(string name, Vertice centro, List<Parte> partes, Vertice color)
+
+        [JsonConstructor]
+        public Objeto3D(string name, Vertice centro, Dictionary<string, Parte> partes, Vertice color)
         {
             this.Name = name;
             this.Centro = centro;
             this.Color = color;
-            this.Partes = partes;
+            this.Partes = partes ?? new Dictionary<string, Parte>();
         }
-        public Objeto3D() : this("", new Vertice(0, 0, 0), new List<Parte>(), new Vertice(0, 0, 0)) { }
-      /*  public List<Parte> CalcularPartesReales()
+
+        public Objeto3D() : this("", new Vertice(0, 0, 0), new Dictionary<string, Parte>(), new Vertice(0, 0, 0)) { }
+
+        public void Dibujar(Shader shader)
         {
-            var partesReales = new List<Parte>();
-            foreach (var parte in Partes)
+            foreach (var parte in Partes.Values)
             {
-                var nuevaParte = new Parte(
-                    new Vertice(
-                        Centro.X + parte.Centro.X,
-                        Centro.Y + parte.Centro.Y,
-                        Centro.Z + parte.Centro.Z
-                    ),
-                    parte.Lados,
-                    Color // o combinar con el color de la parte
-                );
-                partesReales.Add(nuevaParte);
+                parte.Dibujar(shader);
             }
-            return partesReales;
-        }*/
+        }
+
+        public void AgregarParte(string nombre, Parte parte)
+        {
+            Partes[nombre] = parte;
+        }
+        public void DelObjeto(string nombre)
+        {
+            if (Partes.ContainsKey(nombre))  
+            {
+                Partes.Remove(nombre);
+            }
+            else
+            {
+                throw new ArgumentException($"No existe una parte con '{nombre}'.");
+            }
+        }
+        public Parte ObtenerParte(string nombre)
+        {
+            Partes.TryGetValue(nombre, out var parte);
+            return parte;
+        }
+
+        public bool EliminarParte(string nombre)
+        {
+            return Partes.Remove(nombre);
+        }
     }
     #endregion
 }

@@ -6,41 +6,42 @@ namespace ProGrafica
 {
     class Program
     {
-      
+       
         public static void Main()
         {
-   
-         //  Objeto3D mesa= Generador3D.CrearMesaBasica();
-           // JsonHelper.SerializeToFile(mesa, "mesa.json");
             var gws = GameWindowSettings.Default;
             var monitors = Monitors.GetMonitors();
-            var monitor = monitors[1];           
-           // Objeto3D mesa1 = JsonHelper.DeserializeFromFile<Objeto3D>("mesa.json");
-           //Parte cubo1=Generador3D.CrearCubo(new Vertice(0.5f,0.5f,0f),2f,new Vertice(255, 0, 0));
-           //Parte esfera =Generador3D.CrearEsfera(new Vertice(-2f, 0.5f, 0f), 1f,new Vertice(0, 255, 0));
-           // Objeto3D esferas= new Objeto3D("esfera",new Vertice(0, 0, 0), new List<Parte> { esfera }, new Vertice(0, 0, 0));
-            //JsonHelper.SerializeToFile(esferas, "esfera.json");
+            var monitor = monitors[0];
+            Objeto3D teclado = new Objeto3D();
+            teclado=Generador3D.CrearTeclado(new Vertice(0, -1.5f, -1f));
+            teclado.Name="teclado";
+            Objeto3D monitor3d = new Objeto3D();
+            monitor3d=Generador3D.CrearPantalla(new Vertice(0, 2.5f, -4f));
+            monitor3d.Name="monitor";
+            Objeto3D torre = new Objeto3D();
+            torre=Generador3D.CrearPC(new Vertice(-8f, 2f, -3f));
+            torre.Name="torre";
+            Objeto3D mouse = new Objeto3D();
+            mouse=Generador3D.CrearMouse(new Vertice(6.5f, -1.5f, -2f));
+            mouse.Name="mouse";
+            Objeto3D mesa = new Objeto3D();
+            mesa=Generador3D.CrearMesa(new Vertice(0f, -7f, -3f));
+            mesa.Name="mesa";
+            Objeto3D silla= new Objeto3D();
+            silla=Generador3D.CrearSilla(new Vertice(0f, -8f, 6f));
+            Escenario escena = new Escenario();
+            escena.AddObjeto(teclado.Name,teclado);
+            escena.AddObjeto(monitor3d.Name,monitor3d);
+            escena.AddObjeto(torre.Name,torre);
+            escena.AddObjeto(mouse.Name,mouse);
+            escena.AddObjeto(silla.Name,silla);
+            escena.AddObjeto(mesa.Name,mesa);
 
-            List<Objeto3D> objetos = new List<Objeto3D>();
-            // Crear un objeto3D vacío
-           /*     Objeto3D objeto = new Objeto3D
-                {
-                    Name = "EscritorioCompleto",
-                    Centro = new Vertice(0, 0, 0),
-                    Partes = new List<Parte>()
-                };
-
-            // ----------------- Agregar partes -----------------
-            objeto.Partes.Add(Generador3D.CrearEscritorio());   // Escritorio
-            objeto.Partes.Add(Generador3D.CrearPantalla());    // Pantalla
-            objeto.Partes.Add(Generador3D.CrearCPU());         // CPU
-            objeto.Partes.Add(Generador3D.CrearTeclado());     // Teclado
-            objeto.Partes.Add(Generador3D.CrearMouse());       // Mouse
-                                                         */       //objeto.Partes.Add(Generador3D.CrearPantalla(new Vertice(0,0,0),new Vertice(255, 99, 71)));
-                                                                // objeto.Name="pantalla";
-                                                                // Serializador.SerializeToFile(objeto,objeto.Name+".json");
-           // Serializador.SerializeToFile(objeto, "escritorioCompleto.json");
-            objetos.Add(Serializador.DeserializeFromFile<Objeto3D>("escritorioCompleto.json"));
+           // Serializador.SerializeToFile<Escenario>(escena, "escritorioCompleto.json");
+            Escenario escenario1 = new Escenario();
+            
+            escenario1=Serializador.DeserializeFromFile<Escenario>("escritorioCompleto.json");
+           
             var nws = new NativeWindowSettings()
             {
                 Title = "COMPUTADORA EN 3D",
@@ -48,7 +49,7 @@ namespace ProGrafica
                 WindowState = WindowState.Fullscreen,
                 CurrentMonitor = monitor.Handle 
             };
-            using (var game = new Game(gws, nws,objetos))
+            using (var game = new Game(gws, nws, escenario1))
             {
                 game.Run();
             }
