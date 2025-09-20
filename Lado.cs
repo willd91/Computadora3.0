@@ -9,30 +9,65 @@ namespace ProGrafica
     {
         public List<Vertice> Vertices { get; set; }
         public Vertice Centro { get; set; }
+       
         public Vertice Color { get; set; }
+
+        public Vertice Rotacion { get; set; } = new Vertice(0, 0, 0);
+        public Vertice Escala { get; set; } = new Vertice(1, 1, 1);
+        
         private int vao, vbo;
         private int vertexCount;
+
         [JsonConstructor]
-        public Lado(Vertice centro, List<Vertice> vertices, Vertice color)
+        public Lado(Vertice centro, List<Vertice> vertices, Vertice color, 
+                   Vertice rotacion = null, Vertice escala = null) 
         {
             Centro = centro;
             Vertices = vertices;
             Color = color;
+            Rotacion = rotacion ?? new Vertice(0, 0, 0);
+            Escala = escala ?? new Vertice(1, 1, 1);
         }
+
         public Lado() : this(new Vertice(0, 0, 0), new List<Vertice>(), new Vertice(255, 255, 255)) { }
-        public List<Vertice> CalcularVerticesReales()
+
+        public Matrix4 GetModelMatrix()
         {
-            var resultado = new List<Vertice>();
-            foreach (var v in Vertices)
-            {
-                resultado.Add(new Vertice(
-                    Centro.X + v.X,
-                    Centro.Y + v.Y,
-                    Centro.Z + v.Z
-                ));
-            }
-            return resultado;
+            return Matrix4.CreateTranslation(Centro.X, Centro.Y, Centro.Z) *
+            Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(Rotacion.Z)) *
+            Matrix4.CreateRotationY(MathHelper.DegreesToRadians(Rotacion.Y)) *
+            Matrix4.CreateRotationX(MathHelper.DegreesToRadians(Rotacion.X)) *
+            Matrix4.CreateScale(Escala.X, Escala.Y, Escala.Z);
         }
+
+        public void Mover(float x, float y, float z)
+        {
+            Centro.X += x;
+            Centro.Y += y;
+            Centro.Z += z;
+        }
+
+        public void MoverA(float x, float y, float z)
+        {
+            Centro.X = x;
+            Centro.Y = y;
+            Centro.Z = z;
+        }
+
+        public void Rotar(float x, float y, float z)
+        {
+            Rotacion.X += x;
+            Rotacion.Y += y;
+            Rotacion.Z += z;
+        }
+
+        public void Escalar(float x, float y, float z)
+        {
+            Escala.X *= x;
+            Escala.Y *= y;
+            Escala.Z *= z;
+        }
+
         public float[] GetVerticesFloat()
         {
             float[] datos = new float[Vertices.Count * 3];
@@ -44,25 +79,19 @@ namespace ProGrafica
             }
             return datos;
         }
-        /// <summary>
-        /// Inicializa VAO y VBO con los vértices del polígono.
-        /// </summary>
+
         public void InicializarBuffers()
         {
-            var reales = CalcularVerticesReales();
-            var datos = new List<float>();
-            foreach (var v in reales)
-            {
-                datos.Add(v.X);
-                datos.Add(v.Y);
-                datos.Add(v.Z);
-            }
-            vertexCount = reales.Count;
+  
+            var datos = GetVerticesFloat();
+            vertexCount = Vertices.Count;
+            
             vao = GL.GenVertexArray();
             vbo = GL.GenBuffer();
+            
             GL.BindVertexArray(vao);
             GL.BindBuffer(BufferTarget.ArrayBuffer, vbo);
-            GL.BufferData(BufferTarget.ArrayBuffer, datos.Count * sizeof(float), datos.ToArray(), BufferUsageHint.StaticDraw);
+            GL.BufferData(BufferTarget.ArrayBuffer, datos.Length * sizeof(float), datos, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
             GL.EnableVertexAttribArray(0);
 
@@ -70,11 +99,16 @@ namespace ProGrafica
             GL.BindVertexArray(0);
         }
 
-        public void Dibujar(Shader shader)
+        public void Dibujar(Shader shader, Matrix4 parentTransform = default)
         {
             shader.Usar();
 
-            // Pasar color al shader
+            Matrix4 modelMatrix = parentTransform == default ? 
+                GetModelMatrix() : 
+                parentTransform * GetModelMatrix();
+                
+            shader.SetMatrix4("model", modelMatrix);
+
             int colorLoc = GL.GetUniformLocation(shader.Handle, "uColor");
             var colorVec = new Vector4(Color.X / 255f, Color.Y / 255f, Color.Z / 255f, 1.0f);
             GL.Uniform4(colorLoc, colorVec);

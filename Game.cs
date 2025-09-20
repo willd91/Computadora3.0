@@ -36,7 +36,6 @@ namespace ProGrafica
                     }
                 }
             }
-            //CursorGrabbed = true; // ocultar y fijar cursor
         }
 
         protected override void OnRenderFrame(FrameEventArgs args)
@@ -46,11 +45,11 @@ namespace ProGrafica
 
             shader.Usar();
 
-            Matrix4 model = Matrix4.Identity;
+          
             Matrix4 view = camera.GetViewMatrix();
             Matrix4 projection = camera.GetProjectionMatrix(Size.X / (float)Size.Y);
          
-            shader.SetMatrix4("model", model);
+           
             shader.SetMatrix4("view", view);
             shader.SetMatrix4("projection", projection);
 
@@ -70,7 +69,6 @@ namespace ProGrafica
         }
         protected override void OnUnload()
         {
-            // Unbind all the resources by binding the targets to 0/null.
             GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
             GL.BindVertexArray(0);
             GL.UseProgram(0);
@@ -103,13 +101,16 @@ namespace ProGrafica
         {
             base.OnUpdateFrame(args);
 
+
             var input = KeyboardState;
             float speed = 2.5f * (float)args.Time;
 
-            if (input.IsKeyDown(Keys.W)) camera.Move(camera.Front, speed);
-            if (input.IsKeyDown(Keys.S)) camera.Move(-camera.Front, speed);
-            if (input.IsKeyDown(Keys.A)) camera.Move(-camera.Right, speed);
-            if (input.IsKeyDown(Keys.D)) camera.Move(camera.Right, speed);
+            if (input.IsKeyDown(Keys.W)) camera.Move(Vector3.UnitZ, speed);    // Adelante
+            if (input.IsKeyDown(Keys.S)) camera.Move(-Vector3.UnitZ, speed);   // Atrás
+            if (input.IsKeyDown(Keys.A)) camera.Move(-Vector3.UnitX, speed);   // Izquierda
+            if (input.IsKeyDown(Keys.D)) camera.Move(Vector3.UnitX, speed);    // Derecha
+            if (input.IsKeyDown(Keys.Space)) camera.Move(Vector3.UnitY, speed); // Arriba
+            if (input.IsKeyDown(Keys.LeftShift)) camera.Move(-Vector3.UnitY, speed); // Abajo
 
             if (input.IsKeyDown(Keys.Escape)) Close();
         }
