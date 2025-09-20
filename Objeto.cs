@@ -50,9 +50,18 @@ namespace ProGrafica
             Rotacion.Y += y;
             Rotacion.Z += z;
         }
-
+        public void RotarA(float x, float y, float z)
+        {
+            Rotacion.X += x;
+            Rotacion.Y += y;
+            Rotacion.Z += z;
+        }
         public void Escalar(float x, float y, float z)
         {
+            Centro.X *= x;
+            Centro.Y *= y;
+            Centro.Z *= z;
+
             Escala.X *= x;
             Escala.Y *= y;
             Escala.Z *= z;

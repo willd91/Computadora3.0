@@ -102,6 +102,10 @@ namespace ProGrafica
 
         public void Escalar(float x, float y, float z)
         {
+            Centro.X *= x;
+            Centro.Y *= y;
+            Centro.Z *= z;
+
             Escala.X *= x;
             Escala.Y *= y;
             Escala.Z *= z;
@@ -124,7 +128,6 @@ namespace ProGrafica
                 transformacion(objeto);
             }
         }
-
         public void ResetearTransformaciones()
         {
             Centro = new Vertice();

@@ -105,15 +105,37 @@ namespace ProGrafica
             var input = KeyboardState;
             float speed = 2.5f * (float)args.Time;
 
-            if (input.IsKeyDown(Keys.W)) camera.Move(Vector3.UnitZ, speed);    // Adelante
-            if (input.IsKeyDown(Keys.S)) camera.Move(-Vector3.UnitZ, speed);   // Atrás
-            if (input.IsKeyDown(Keys.A)) camera.Move(-Vector3.UnitX, speed);   // Izquierda
-            if (input.IsKeyDown(Keys.D)) camera.Move(Vector3.UnitX, speed);    // Derecha
-            if (input.IsKeyDown(Keys.Space)) camera.Move(Vector3.UnitY, speed); // Arriba
-            if (input.IsKeyDown(Keys.LeftShift)) camera.Move(-Vector3.UnitY, speed); // Abajo
+            /*   if (input.IsKeyDown(Keys.W)) camera.Move(Vector3.UnitZ, speed);    // Adelante
+               if (input.IsKeyDown(Keys.S)) camera.Move(-Vector3.UnitZ, speed);   // Atrás
+               if (input.IsKeyDown(Keys.A)) camera.Move(-Vector3.UnitX, speed);   // Izquierda
+               if (input.IsKeyDown(Keys.D)) camera.Move(Vector3.UnitX, speed);    // Derecha
+               if (input.IsKeyDown(Keys.Space)) camera.Move(Vector3.UnitY, speed); // Arriba
+               if (input.IsKeyDown(Keys.LeftShift)) camera.Move(-Vector3.UnitY, speed); // Abajo*/
 
-            if (input.IsKeyDown(Keys.Escape)) Close();
+            if (input.IsKeyDown(Keys.W)) escena.Mover(0, 0, 0.1f);
+            if (input.IsKeyDown(Keys.S)) escena.Mover(0, 0, -0.1f);
+            if (input.IsKeyDown(Keys.A)) escena.Mover(0.1f, 0, 0);
+            if (input.IsKeyDown(Keys.D)) escena.Mover(-0.1f, 0, 0); 
+            if (input.IsKeyDown(Keys.Z)) escena.Mover(0, 0.1f, 0); 
+            if (input.IsKeyDown(Keys.X)) escena.Mover(0, -0.1f, 0); 
+
+            if (input.IsKeyDown(Keys.Y))
+            {     
+                escena.Rotar(0, 0.1f, 0);
+            }
+            ;
+
+
+
+                if (input.IsKeyDown(Keys.U)) escena.Rotar(0, -0.1f, 0);
+
+                if (input.IsKeyDown(Keys.I)) escena.Mover(0, 0.1f, 0); ;
+                if (input.IsKeyDown(Keys.O)) escena.Mover(0, -0.1f, 0); ;
+
+                if (input.IsKeyDown(Keys.Space)) camera.Move(Vector3.UnitY, speed);
+                if (input.IsKeyDown(Keys.LeftShift)) camera.Move(-Vector3.UnitY, speed);
+                if (input.IsKeyDown(Keys.Escape)) Close();
+            }
         }
-
-    }
+    
 }

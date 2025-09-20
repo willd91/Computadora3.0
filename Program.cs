@@ -12,7 +12,7 @@ namespace ProGrafica
             var gws = GameWindowSettings.Default;
             var monitors = Monitors.GetMonitors();
             var monitor = monitors[0];
-            Objeto teclado = new Objeto();
+          /*  Objeto teclado = new Objeto();
             teclado=Generador3D.CrearTeclado(new Vertice(0, 0.1f, -2f));
             teclado.Name="teclado";
             Objeto monitor3d = new Objeto();
@@ -35,15 +35,17 @@ namespace ProGrafica
             escena.AddObjeto(torre.Name,torre);
             escena.AddObjeto(mouse.Name,mouse);
             escena.AddObjeto(silla.Name,silla);
-            escena.AddObjeto(mesa.Name,mesa);
+            escena.AddObjeto(mesa.Name,mesa);*/
           
-            Serializador.SerializeToFile<Escenario>(escena, "escritorioCompleto.json");
+           // Serializador.SerializeToFile<Escenario>(escena, "escritorioCompleto.json");
             Escenario escenario1 = new Escenario();          
             escenario1=Serializador.DeserializeFromFile<Escenario>("escritorioCompleto.json");
             //escenario1.Rotar(90,0,0);    
             escenario1.Mover(escenario1.Centro.X, escenario1.Centro.Y, escenario1.Centro.Z);
+            escenario1.Escalar(2f,2f,2f);
             escenario1.Escalar(0.5f,0.5f,0.5f);
-            // escenario1.Objetos["silla"].Rotar(0,90,0);
+            
+            // escenario1.Objetos["monitor"].Rotar(0,90,0);
 
             var nws = new NativeWindowSettings()
             {
